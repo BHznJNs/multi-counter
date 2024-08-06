@@ -1,0 +1,38 @@
+{
+  "name": "multi-counter",
+  "version": "1.0.0",
+  "description": "A simple and light-weight word counter with multi-language support",
+  "main": "./dist-cjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist-esm/index.js",
+      "require": "./dist-cjs/index.js",
+      "default": "./dist-esm/index.js"
+    }
+  },
+  "scripts": {
+    "test": "mocha",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm run build:esm && npm run build:cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BHznJNs/multi-counter.git"
+  },
+  "keywords": [
+    "word-counter",
+    "count",
+    "counter",
+    "multi-language"
+  ],
+  "author": "BHznJNs",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/BHznJNs/multi-counter/issues"
+  },
+  "homepage": "https://github.com/BHznJNs/multi-counter#readme",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
