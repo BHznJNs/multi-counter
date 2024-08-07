@@ -1,21 +1,19 @@
 {
   "name": "multilang-counter",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A simple and light-weight word counter with multi-language support",
-  "main": "./dist-cjs/index.js",
+  "main": "./dist/index.cjs",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist-esm/index.js",
-      "require": "./dist-cjs/index.js",
-      "default": "./dist-esm/index.js"
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.esm.js"
     }
   },
   "scripts": {
     "test": "mocha",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm run build:esm && npm run build:cjs"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -34,7 +32,9 @@
   },
   "homepage": "https://github.com/BHznJNs/multilang-counter#readme",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
     "mocha": "^10.7.0",
+    "rollup": "^4.20.0",
     "typescript": "^5.5.4"
   }
 }

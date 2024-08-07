@@ -1,3 +1,5 @@
+'use strict';
+
 const cjkCharPattern = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu;
 const euCharPattern = /[A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF]+/g;
 const grCharPattern = /\p{Script=Greek}+/gu;
@@ -12,7 +14,7 @@ const patternList = [
     cyCharPattern,
     numberPattern,
 ];
-export function tokenize(para = "") {
+function tokenize(para = "") {
     if (para.length === 0) {
         return [];
     }
@@ -22,13 +24,19 @@ export function tokenize(para = "") {
     return tokenList;
 }
 const DEFAULT_READ_SPEED_PER_MIN = 300;
-export function readingTime(para = "", wordsPerMin = DEFAULT_READ_SPEED_PER_MIN) {
+function readingTime(para = "", wordsPerMin = DEFAULT_READ_SPEED_PER_MIN) {
     if (para.length === 0) {
         return 0;
     }
-    function compute(wordCount, pattern) {
+    const compute = (() => {
         if (typeof wordsPerMin === "number") {
-            return wordCount / wordsPerMin;
+            return function (wordCount, pattern) {
+                return wordCount / wordsPerMin;
+            };
+        }
+        if (wordsPerMin.default === undefined) {
+            // set default value
+            wordsPerMin.default = DEFAULT_READ_SPEED_PER_MIN;
         }
         const patternMap = new Map([
             [cjkCharPattern, wordsPerMin.cjk],
@@ -38,21 +46,27 @@ export function readingTime(para = "", wordsPerMin = DEFAULT_READ_SPEED_PER_MIN)
             [cyCharPattern, wordsPerMin.cy],
             [numberPattern, wordsPerMin.num],
         ]);
-        const targetSpeed = patternMap.get(pattern);
-        return targetSpeed === undefined ?
-            wordCount / DEFAULT_READ_SPEED_PER_MIN :
-            wordCount / targetSpeed;
-    }
+        return function (wordCount, pattern) {
+            const targetSpeed = patternMap.get(pattern);
+            return targetSpeed === undefined ?
+                wordCount / wordsPerMin.default :
+                wordCount / targetSpeed;
+        };
+    })();
     const requiredTime = patternList.reduce((accumulator, current) => {
         const matched = para.match(current) || [];
         return accumulator + compute(matched.length, current);
     }, 0);
     return requiredTime;
 }
-export function countWords(para = "") {
+function countWords(para = "") {
     if (para.length === 0) {
         return 0;
     }
     const tokenList = tokenize(para);
     return tokenList.length;
 }
+
+exports.countWords = countWords;
+exports.readingTime = readingTime;
+exports.tokenize = tokenize;

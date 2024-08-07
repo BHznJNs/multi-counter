@@ -73,24 +73,6 @@ export function readingTime(
         }
     })()
 
-    // function compute(wordCount: number, pattern: RegExp): number {
-    //     if (typeof wordsPerMin === "number") {
-    //         return wordCount / wordsPerMin
-    //     }
-    //     const patternMap = new Map<RegExp, number | undefined>([
-    //         [cjkCharPattern, wordsPerMin.cjk],
-    //         [euCharPattern , wordsPerMin.eu ],
-    //         [grCharPattern , wordsPerMin.gr ],
-    //         [arCharPattern , wordsPerMin.ar ],
-    //         [cyCharPattern , wordsPerMin.cy ],
-    //         [numberPattern , wordsPerMin.num],
-    //     ])
-    //     const targetSpeed = patternMap.get(pattern)
-    //     return targetSpeed === undefined ?
-    //         wordCount / DEFAULT_READ_SPEED_PER_MIN :
-    //         wordCount / targetSpeed
-    // }
-
     const requiredTime = patternList.reduce((accumulator: number, current: RegExp) => {
         const matched = para.match(current) || []
         return accumulator + compute(matched.length, current)
