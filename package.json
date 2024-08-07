@@ -1,8 +1,9 @@
 {
-  "name": "multi-counter",
-  "version": "1.0.0",
+  "name": "multilang-counter",
+  "version": "1.1.0",
   "description": "A simple and light-weight word counter with multi-language support",
   "main": "./dist-cjs/index.js",
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist-esm/index.js",
@@ -18,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BHznJNs/multi-counter.git"
+    "url": "git+https://github.com/BHznJNs/multilang-counter.git"
   },
   "keywords": [
     "word-counter",
@@ -29,10 +30,11 @@
   "author": "BHznJNs",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/BHznJNs/multi-counter/issues"
+    "url": "https://github.com/BHznJNs/multilang-counter/issues"
   },
-  "homepage": "https://github.com/BHznJNs/multi-counter#readme",
+  "homepage": "https://github.com/BHznJNs/multilang-counter#readme",
   "devDependencies": {
+    "mocha": "^10.7.0",
     "typescript": "^5.5.4"
   }
 }

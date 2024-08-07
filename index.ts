@@ -14,7 +14,7 @@ const patternList: RegExp[] = [
     numberPattern,
 ]
 
-export function tokenizer(para=""): string[] {
+export function tokenize(para=""): string[] {
     if (para.length === 0) {
         return []
     }
@@ -28,11 +28,81 @@ export function tokenizer(para=""): string[] {
     return tokenList
 }
 
-export default function counter(para=""): number {
+const DEFAULT_READ_SPEED_PER_MIN = 300
+type ReadingRate = number | {
+    cjk?: number,
+    eu?: number,
+    gr?: number,
+    ar?: number,
+    cy?: number,
+    num?: number,
+    default?: number,
+}
+export function readingTime(
+    para="",
+    wordsPerMin: ReadingRate=DEFAULT_READ_SPEED_PER_MIN,
+): number {
     if (para.length === 0) {
         return 0
     }
 
-    const tokenList = tokenizer(para)
+    const compute = (() => {
+        if (typeof wordsPerMin === "number") {
+            return function(wordCount: number, pattern: RegExp): number {
+                return wordCount / wordsPerMin
+            }
+        }
+
+        if (wordsPerMin.default === undefined) {
+            // set default value
+            wordsPerMin.default = DEFAULT_READ_SPEED_PER_MIN
+        }
+        const patternMap = new Map<RegExp, number | undefined>([
+            [cjkCharPattern, wordsPerMin.cjk],
+            [euCharPattern , wordsPerMin.eu ],
+            [grCharPattern , wordsPerMin.gr ],
+            [arCharPattern , wordsPerMin.ar ],
+            [cyCharPattern , wordsPerMin.cy ],
+            [numberPattern , wordsPerMin.num],
+        ])
+        return function(wordCount: number, pattern: RegExp): number {
+            const targetSpeed = patternMap.get(pattern)
+            return targetSpeed === undefined ?
+                wordCount / wordsPerMin.default! :
+                wordCount / targetSpeed
+        }
+    })()
+
+    // function compute(wordCount: number, pattern: RegExp): number {
+    //     if (typeof wordsPerMin === "number") {
+    //         return wordCount / wordsPerMin
+    //     }
+    //     const patternMap = new Map<RegExp, number | undefined>([
+    //         [cjkCharPattern, wordsPerMin.cjk],
+    //         [euCharPattern , wordsPerMin.eu ],
+    //         [grCharPattern , wordsPerMin.gr ],
+    //         [arCharPattern , wordsPerMin.ar ],
+    //         [cyCharPattern , wordsPerMin.cy ],
+    //         [numberPattern , wordsPerMin.num],
+    //     ])
+    //     const targetSpeed = patternMap.get(pattern)
+    //     return targetSpeed === undefined ?
+    //         wordCount / DEFAULT_READ_SPEED_PER_MIN :
+    //         wordCount / targetSpeed
+    // }
+
+    const requiredTime = patternList.reduce((accumulator: number, current: RegExp) => {
+        const matched = para.match(current) || []
+        return accumulator + compute(matched.length, current)
+    }, 0)
+    return requiredTime
+}
+
+export function countWords(para=""): number {
+    if (para.length === 0) {
+        return 0
+    }
+
+    const tokenList = tokenize(para)
     return tokenList.length
 }
