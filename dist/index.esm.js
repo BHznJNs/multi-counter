@@ -12,7 +12,18 @@ const patternList = [
     cyCharPattern,
     numberPattern,
 ];
-function tokenize(para = "") {
+function preprocessStringParams(param) {
+    const paramType = typeof param;
+    if (paramType === "string") {
+        return param;
+    }
+    else if (paramType === "number") {
+        return String(param);
+    }
+    throw new TypeError("Expected a string, got " + typeof param);
+}
+function tokenize(para) {
+    para = preprocessStringParams(para);
     if (para.length === 0) {
         return [];
     }
@@ -22,7 +33,8 @@ function tokenize(para = "") {
     return tokenList;
 }
 const DEFAULT_READ_SPEED_PER_MIN = 300;
-function readingTime(para = "", wordsPerMin = DEFAULT_READ_SPEED_PER_MIN) {
+function readingTime(para, wordsPerMin = DEFAULT_READ_SPEED_PER_MIN) {
+    para = preprocessStringParams(para);
     if (para.length === 0) {
         return 0;
     }
@@ -31,6 +43,10 @@ function readingTime(para = "", wordsPerMin = DEFAULT_READ_SPEED_PER_MIN) {
             return function (wordCount, pattern) {
                 return wordCount / wordsPerMin;
             };
+        }
+        else if (typeof wordsPerMin !== "object") {
+            // unexpected input type
+            throw new TypeError("Expected a string or an object, got " + typeof wordsPerMin);
         }
         if (wordsPerMin.default === undefined) {
             // set default value
@@ -57,7 +73,8 @@ function readingTime(para = "", wordsPerMin = DEFAULT_READ_SPEED_PER_MIN) {
     }, 0);
     return requiredTime;
 }
-function countWords(para = "") {
+function countWords(para) {
+    para = preprocessStringParams(para);
     if (para.length === 0) {
         return 0;
     }

@@ -14,7 +14,19 @@ const patternList: RegExp[] = [
     numberPattern,
 ]
 
-export function tokenize(para=""): string[] {
+function preprocessStringParams(param: any): string {
+    const paramType = typeof param
+    if (paramType === "string") {
+        return param
+    } else if (paramType === "number") {
+        return String(param)
+    }
+
+    throw new TypeError("Expected a string, got " + typeof param)
+}
+
+export function tokenize(para: string): string[] {
+    para = preprocessStringParams(para)
     if (para.length === 0) {
         return []
     }
@@ -39,9 +51,10 @@ type ReadingRate = number | {
     default?: number,
 }
 export function readingTime(
-    para="",
+    para: string,
     wordsPerMin: ReadingRate=DEFAULT_READ_SPEED_PER_MIN,
 ): number {
+    para = preprocessStringParams(para)
     if (para.length === 0) {
         return 0
     }
@@ -51,6 +64,9 @@ export function readingTime(
             return function(wordCount: number, pattern: RegExp): number {
                 return wordCount / wordsPerMin
             }
+        } else if (typeof wordsPerMin !== "object") {
+            // unexpected input type
+            throw new TypeError("Expected a string or an object, got " + typeof wordsPerMin)
         }
 
         if (wordsPerMin.default === undefined) {
@@ -80,7 +96,8 @@ export function readingTime(
     return requiredTime
 }
 
-export function countWords(para=""): number {
+export function countWords(para: string): number {
+    para = preprocessStringParams(para)
     if (para.length === 0) {
         return 0
     }

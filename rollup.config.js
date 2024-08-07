@@ -5,7 +5,7 @@ export default [
     {
         input: "index.ts", // 指定入口文件
         output: {
-            file: "dist/index.cjs.js",
+            file: "dist/index.cjs",
             format: "cjs",
         },
         plugins: [typescript()],
