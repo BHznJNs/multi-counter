@@ -1,5 +1,5 @@
 import assert from "node:assert"
-import { countWords, readingTime, tokenize } from "../dist-esm/index.js"
+import { tokenize } from "../dist/index.esm.js"
 
 describe("tokenize", () => {
     it("should be a function", () => {
@@ -62,17 +62,5 @@ describe("tokenize", () => {
                 assert.deepStrictEqual(tokenize(russianText), expectedTokens)
             })
         })
-    })
-})
-
-describe("readingTime", () => {
-    it("should be a function", () => {
-        assert.ok(readingTime instanceof Function)
-    })
-})
-
-describe("countWords", () => {
-    it("should be a function", () => {
-        assert.ok(countWords instanceof Function)
     })
 })
