@@ -37,7 +37,7 @@ describe("tokenize", () => {
                 assert.deepStrictEqual(tokenize(koreanText), expectedTokens)
             })
         })
-        describe('Other languages', () => {
+        describe("Other languages", () => {
             it("should tokenize English text correctly and remove punctuation", () => {
                 const englishText = "Hello, world!"
                 const expectedTokens = ["Hello", "world"]
