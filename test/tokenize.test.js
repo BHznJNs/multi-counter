@@ -6,13 +6,13 @@ describe("tokenize", () => {
         assert.ok(tokenize instanceof Function)
     })
     it("should accepts a string input and returns tokenized string array", () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
             tokenize("Hello World"),
             ["Hello", "World"],
         )
     })
     it("should ignores punctuations in the input", () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
             tokenize("Hello, World!"),
             ["Hello", "World"],
         )
@@ -61,6 +61,22 @@ describe("tokenize", () => {
                 const expectedTokens = ["Привет", "мир"]
                 assert.deepStrictEqual(tokenize(russianText), expectedTokens)
             })
+        })
+    })
+    describe("resolve for different type of input", () => {
+        it("should works well with number input", () => {
+            assert.deepStrictEqual(tokenize(123) , ["123" ])
+            assert.deepStrictEqual(tokenize(-123), ["-123"])
+            assert.deepStrictEqual(tokenize(1.23), ["1.23"])
+        })
+        it("should reject all input other that string and number typed", () => {
+            const inputArr = [undefined, null, true, false, Symbol(""), {}, new Function]
+            for (const input of inputArr) {
+                assert.throws(() => tokenize(input), {
+                    name: "TypeError",
+                    message: "Expected a string, got " + typeof input
+                })
+            }
         })
     })
 })
