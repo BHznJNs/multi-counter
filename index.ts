@@ -41,7 +41,7 @@ export function tokenize(para: string): string[] {
 }
 
 const DEFAULT_READ_SPEED_PER_MIN = 300
-type ReadingRate = number | {
+export type ReadingRate = number | {
     cjk?: number,
     eu?: number,
     gr?: number,

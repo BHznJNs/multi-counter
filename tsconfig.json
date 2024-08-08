@@ -3,6 +3,8 @@
         "target": "ES2015",
         "module": "ESNext",
         "lib": ["ESNext"],
+        "outDir": "./dist",
+        "declaration": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
