@@ -46,11 +46,11 @@ readingTime("...a paragraph consists of multiple languages...", {
 ### Install & Import
 
 ```bash
-npm i multilang-counter
+npm i @bhznjns/multi-counter
 ```
 
 ```javascript
-import { countWords, readingTime, tokenize } from "multilang-counter"
+import { countWords, readingTime, tokenize } from "@bhznjns/multi-counter"
 ```
 
 ### API
